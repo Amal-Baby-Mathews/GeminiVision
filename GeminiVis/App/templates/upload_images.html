@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Images</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>Upload Images</h1>
+    {% if single_status == 'success' %}
+        <p>Single image uploaded successfully!</p>
+    {% endif %}
+    {% if batch_status == 'success' %}
+        <p>Batch images uploaded successfully!</p>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Single Image Upload</h2>
+        <label for="single_image">Image:</label>
+        <input type="file" id="single_image" name="single_image">
+        <br>
+        <h2>Batch Image Upload</h2>
+        <label for="batch_images">Images:</label>
+        <input type="file" id="batch_images" name="batch_images" multiple>
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
