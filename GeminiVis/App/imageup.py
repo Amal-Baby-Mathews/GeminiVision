@@ -2,8 +2,10 @@ import os
 import sqlite3
 import litellm
 from PIL import Image  # for image compression
+import dotenv
 # Replace with your Gemini Vision API key and endpoint
-GEMINI_VISION_API_KEY = "AIzaSyCXYka-DyBrrsyE-yqwcAcUn5FNEJ8-IqE"
+load_dotenv()
+GEMINI_VISION_API_KEY = os.getenv('GEMINI_VISION_API_KEY')
 GEMINI_VISION_ENDPOINT = "https://api.gemini.ai/vision/v1/analyze"
 from dotenv import load_dotenv
 
@@ -46,7 +48,7 @@ def compress_image(image_path, output_path, quality=80):
 
 
 def analyze_image(image_path):
-    load_dotenv()
+
     """Analyze the image using the Gemini API."""
     os.environ["GEMINI_API_KEY"] = GEMINI_VISION_API_KEY
     prompt = 'Describe the image in a few sentences.'
