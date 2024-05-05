@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>Products</h1>
+    <div class="product-container">
+        {% for product in products %}
+        <div class="product">
+            <img src="{% static 'uploaded_images/'|add:product.0 %}" alt="{{ product.1 }}">
+            <p>{{ product.1 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

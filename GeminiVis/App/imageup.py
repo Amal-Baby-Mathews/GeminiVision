@@ -2,11 +2,10 @@ import os
 import sqlite3
 import litellm
 from PIL import Image  # for image compression
-import dotenv
+from dotenv import load_dotenv
 # Replace with your Gemini Vision API key and endpoint
 load_dotenv()
 GEMINI_VISION_API_KEY = os.getenv('GEMINI_VISION_API_KEY')
-GEMINI_VISION_ENDPOINT = "https://api.gemini.ai/vision/v1/analyze"
 from dotenv import load_dotenv
 
 
@@ -31,8 +30,15 @@ def create_table(conn):
 def insert_data(conn, image_id, description, image_path):
   """Inserts data into the 'products' table."""
   cursor = conn.cursor()
-  cursor.execute('''INSERT INTO products (image_id, description, image_path)
-                        VALUES (?, ?, ?)''', (image_id,  description, image_path))
+  try:
+    cursor.execute('''INSERT INTO products (image_id, description, image_path)
+                          VALUES (?, ?, ?)''', (image_id,  description, image_path))
+  except sqlite3.OperationalError:
+    cursor.execute("SELECT max(image_id) FROM products")
+    image_id = cursor.fetchone()
+    image_id = str(image_id + 1)
+    cursor.execute('''INSERT INTO products (image_id, description, image_path)
+                          VALUES (?, ?, ?)''', (image_id,  description, image_path))
   conn.commit()
 
 
@@ -40,7 +46,8 @@ def compress_image(image_path, output_path, quality=80):
   """Compresses an image using Pillow."""
   img = Image.open(image_path)
   # Move the compressed image to the desired location
-  target_dir = 'C:\\Users\\amalb\\Amal Work\\GeminiVision\\GeminiVision\\GeminiVis\\uploaded_images'
+  #C:\Users\amalb\Amal Work\GeminiVision\GeminiVision\GeminiVis\App\static\uploaded_images
+  target_dir = 'C:\\Users\\amalb\\Amal Work\\GeminiVision\\GeminiVision\\GeminiVis\\App\\static\\uploaded_images'
   os.makedirs(target_dir, exist_ok=True)  # Create the target directory if it doesn't exist
   compressed_path = os.path.join(target_dir, output_path)
   img.save(compressed_path, quality=quality)
@@ -91,9 +98,10 @@ def upload_and_store_data(image_path, image_id):
 
   # Extract labels and description (replace with specific keys if different)
   description = analysis_result
-  print(description)
+  filename = os.path.basename(full_compressed_path)
+  print(filename)
   # Store data in database
-  insert_data(conn, image_id, description, full_compressed_path)
+  insert_data(conn, image_id, description, filename)
   conn.close()
   print(f'Image compressed, analyzed, and data stored for ID: {image_id}')
 
@@ -118,4 +126,4 @@ def upload_multiple_images_from_folder(folder_path, start_id=0):
         upload_and_store_data(image_path, str(i))
 
 
-# upload_and_store_data(image_path, image_id)
+

@@ -49,3 +49,21 @@ def upload_images(request):
             context['batch_status'] = 'success'
 
     return render(request, 'upload_images.html', context)
+
+def show_products(request):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(r'C:\Users\amalb\Amal Work\GeminiVision\GeminiVision\GeminiVis\product_data.db')
+    cursor = conn.cursor()
+
+    # Get all product data (image path and description)
+    cursor.execute("SELECT image_path, description FROM products")
+    products = cursor.fetchall()
+
+    # Print image_path to terminal for debugging
+    for product in products:
+        image_path, description = product
+        print(f"Image path: {image_path}")
+
+
+    context = {'products': products}
+    return render(request, 'show_products.html', context)
