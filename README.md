@@ -76,14 +76,6 @@ This project aims to create a novel e-commerce experience by integrating several
 - Incorporate visual search for users to explore products using images.
 - Introduce personalization features based on user purchase history or browsing behavior.
 
-**Contributing**
-
-We welcome contributions to this project! Please see the `CONTRIBUTING.md` file (if it exists) for guidelines on how to get involved.
-
-**License**
-
-[Specify the license under which your project is distributed (e.g., MIT, Apache 2.0)]
-
 **Disclaimer**
 
 This project is for educational and research purposes only. Adapt and use the provided information responsibly.
